@@ -35,36 +35,16 @@ copy(){
 
 show_help(){
 echo -e "
-cibu compose <SUBCOMMAND> [args...]
+citf remote <SUBCOMMAND> [args...]
 docker-compose related commands
 SUBCOMMANDS:
-login <login> <password> <registry>
-    Run docker login on remote server
-    Example cibu compose login user password registry.gitlab.com
-    Will run ssh \$TARGET_HOST docker login -u user -p password registry.gitlab.com
-upload [suffix]
-    Upload docker-compose file with target suffix (if provided) to remote server.
-    Example: cibu compose upload qa
-    Will run scp docker-compose-qa.yml \$TARGET_HOST:\$TARGET_PATH/docker-compose.yml
-pull [docker-compose pull argumets]
-    Perform a 'docker-compose pull' with arguments (if provided) on remote server in selected dir
-    Example: cibu compose pull --parallel
-    Will run ssh \$TARGET_HOST 'cd \$TARGET_PATH; docker-compose pull --parallel'
-remove <service>
-    Stop and remove selected service
-    Example: cibu compose remove redis
-    Will run ssh \$TARGET_HOST 'cd \$TARGET_PATH; docker-compose stop redis; docker-compose rm -f redis'
-up [docker-compose up args...]
-    Run docker-compose up command on target server
-    Example: cibu compose up --force-recreate
-    Will run ssh \$TARGET_HOST 'cd \$TARGET_PATH; docker-compose up --force-recreate'
-update <service>
-    Stop, remove and recreate selected service
-    Example: cibu compose update redis
-    Will run ssh \$TARGET_HOST 'cd \$TARGET_PATH; docker-compose stop redis; docker-compose rm -f redis; docker-compose up -d --force-recreate --remove-orphans --no-deps redis'
-cleanup
-    Run docker system prune and clean volumes marked to remove
-    Example: cibu compose cleanup
-    Will run ssh \$TARGET_HOST 'docker system prune -a -f; rm -rf /var/lib/docker/aufs/diff/*-removing'
+rdo <command>
+    Run a command on remote server.
+    Example: citf remote rdo 'bash update-server.sh'
+    Will run ssh \$TARGET_HOST 'cd \$TARGET_PATH; bash update-server.sh'
+copy <source> <destination>
+    Perform a 'scp' from 'source' to remote 'destination'
+    Example: citf remote copy ../bin/update-server.sh /update-server.sh
+    Will run scp ../bin/update-server.sh \$TARGET_HOST:\$TARGET_PATH/update-server.sh
 "
 }

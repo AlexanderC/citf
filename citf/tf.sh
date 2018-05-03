@@ -10,6 +10,11 @@ main(){
 }
 
 check(){
+    if [[ -z "$TF_WORKSPACE" ]]; then
+        echo "\$TF_WORKSPACE environment variable not set"
+        exit 1
+    fi
+
     if [[ -z "$TERRAFORM_FOLDER" ]]; then
         echo "\$TERRAFORM_FOLDER environment variable not set"
         exit 1
@@ -75,4 +80,20 @@ update(){
 saveState(){
     aws s3 cp terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate s3://$S3_BUCKET_TF_STATE/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate
     aws s3 cp terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup s3://$S3_BUCKET_TF_STATE/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup
+}
+
+show_help(){
+echo -e "
+citf tf <SUBCOMMAND> [args...]
+docker-compose related commands
+SUBCOMMANDS:
+rdo <command>
+    Run a command on remote server.
+    Example: citf remote rdo 'bash update-server.sh'
+    Will run ssh \$TARGET_HOST 'cd \$TARGET_PATH; bash update-server.sh'
+copy <source> <destination>
+    Perform a 'scp' from 'source' to remote 'destination'
+    Example: citf remote copy ../bin/update-server.sh /update-server.sh
+    Will run scp ../bin/update-server.sh \$TARGET_HOST:\$TARGET_PATH/update-server.sh
+"
 }
