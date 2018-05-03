@@ -10,19 +10,27 @@ main(){
 }
 
 check(){
-    if [[ -z "$AWS_ACCESS_KEY_ID" ]]; then
-        echo "\$AWS_ACCESS_KEY_ID environment variable not set"
-        exit 1
-    fi
-
-    if [[ -z "$AWS_SECRET_ACCESS_KEY" ]]; then
-        echo "\$AWS_SECRET_ACCESS_KEY environment variable not set"
+    if [[ -z "$TARGET_HOST" ]]; then
+        echo "\$TARGET_HOST environment variable not set"
         exit 1
     fi
 }
 
-pull(){
+
+rdo(){
     ssh $TARGET_HOST "cd $TARGET_PATH; $3"
+}
+
+copy(){
+    if [[ -z "$3" ]]; then
+        echo "Source is not set. Please check documentation"
+        exit 1
+    fi
+    if [[ -z "$4" ]]; then
+        echo "Destination is not set. Please check documentation"
+        exit 1
+    fi
+    scp $3 "${TARGET_HOST}:${TARGET_PATH}${4}"
 }
 
 show_help(){
