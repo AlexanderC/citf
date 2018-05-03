@@ -45,13 +45,20 @@ prepare(){
     terraform init -input=false
     export $(tf-output outputs -p '')
 
-    INSTANCE="${ci_instance_id%\"}"
+    export ASG_NAME="${autoscaling_g_name%\"}"
+    ASG_NAME="${ASG_NAME#\"}"
+
+    export INSTANCE="${ci_instance_id%\"}"
     INSTANCE="${INSTANCE#\"}"
-    LAST_AMI_ID="${ci_last_ami_id%\"}"
+
+    export LAST_AMI_ID="${ci_last_ami_id%\"}"
     LAST_AMI_ID="${LAST_AMI_ID#\"}"
-    TARGET_HOST="${ci_instance_ip%\"}"
+
+    export TARGET_HOST="${ci_instance_ip%\"}"
     TARGET_HOST="${TARGET_HOST#\"}"
     TARGET_HOST="${REMOTE_USER}@${TARGET_HOST}"
+
+    export OLD_INSTANCES=`aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names $ASG_NAME | jq -r '.AutoScalingGroups[].Instances[].InstanceId'`
 }
 
 update(){
