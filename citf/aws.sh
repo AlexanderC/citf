@@ -30,9 +30,9 @@ prepare(){
 }
 
 updateAmi(){
-    export TF_VAR_ami_id=`aws ec2 create-image --instance-id $INSTANCE --name $3 --output text`
-    aws ec2 wait image-available --image-ids "$TF_VAR_ami_id"
-    echo "$TF_VAR_ami_id"
+    ami_id=`aws ec2 create-image --instance-id $INSTANCE --name $3 --output text`
+    aws ec2 wait image-available --image-ids "$ami_id"
+    echo "$ami_id"
 }
 
 cleanUp(){
