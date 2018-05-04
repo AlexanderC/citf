@@ -4,8 +4,6 @@ main(){
     check
     if [[ "$(type -t "$2")" = function ]]; then
         $2 $@
-    else
-        show_help
     fi
 }
 
@@ -42,7 +40,8 @@ check(){
 }
 
 prepare(){
-
+    echo $TF_VAR_aws_secret_key42
+    return
     cd $TERRAFORM_FOLDER
     aws s3 cp s3://$S3_BUCKET_TF_STATE/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate
     aws s3 cp s3://$S3_BUCKET_TF_STATE/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup
@@ -82,7 +81,7 @@ saveState(){
     aws s3 cp terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup s3://$S3_BUCKET_TF_STATE/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup
 }
 
-show_help(){
+help(){
 echo -e "
 citf tf <SUBCOMMAND> [args...]
 docker-compose related commands

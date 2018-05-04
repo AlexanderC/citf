@@ -4,8 +4,6 @@ main(){
     check
     if [[ "$(type -t "$2")" = function ]]; then
         $2 $@
-    else
-        show_help
     fi
 }
 
@@ -33,7 +31,7 @@ copy(){
     scp $3 "${TARGET_HOST}:${TARGET_PATH}${4}"
 }
 
-show_help(){
+help(){
 echo -e "
 citf remote <SUBCOMMAND> [args...]
 docker-compose related commands

@@ -2,7 +2,6 @@
 
 PREFIX="/opt/citf"
 
-
 # Set command
 if [[ "$1" == "-h" ]] || [[ "$1" == "--help" ]] || [[ -z "$1" ]]; then
     MODULE="$PREFIX/help.sh"
