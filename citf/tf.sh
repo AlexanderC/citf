@@ -40,8 +40,6 @@ check(){
 }
 
 prepare(){
-    echo $TF_VAR_aws_secret_key42
-    return
     cd $TERRAFORM_FOLDER
     aws s3 cp s3://$S3_BUCKET_TF_STATE/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate
     aws s3 cp s3://$S3_BUCKET_TF_STATE/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup
