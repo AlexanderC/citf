@@ -32,7 +32,7 @@ prepare(){
 updateAmi(){
     ami_id=`aws ec2 create-image --instance-id $INSTANCE --name $3 --output text`
     aws ec2 wait image-available --image-ids "$ami_id"
-    echo "$ami_id"
+    echo \"$ami_id\"
 }
 
 cleanUp(){
