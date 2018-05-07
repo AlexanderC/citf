@@ -16,6 +16,7 @@ check(){
 
 
 rdo(){
+    echo "Started: $3"
     ssh $TARGET_HOST "cd $TARGET_PATH; $3"
 }
 
