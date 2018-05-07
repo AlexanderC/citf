@@ -16,4 +16,4 @@ if [ ! -f "$MODULE" ]; then
 fi
 
 source "$MODULE"
-main $@
+main "$@"
