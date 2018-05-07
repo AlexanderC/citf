@@ -3,7 +3,7 @@
 main(){
     check
     if [[ "$(type -t "$2")" = function ]]; then
-        $2 $@
+        $2 "$@"
     fi
 }
 
