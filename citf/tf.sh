@@ -45,7 +45,11 @@ prepare(){
     aws s3 cp s3://$S3_BUCKET_TF_STATE/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup
 
     terraform init -input=false
-    export $(tf-output outputs -p '')
+    if [ -z ${TF_OUTPUT_MODULE+x} ]; then
+        export $(tf-output outputs -p '')
+    else
+        export $(tf-output outputs -p '' -m "${TF_OUTPUT_MODULE}")
+    fi
 
     export ASG_NAME="${autoscaling_g_name%\"}"
     ASG_NAME="${ASG_NAME#\"}"
