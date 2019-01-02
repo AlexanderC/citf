@@ -40,7 +40,6 @@ check(){
 }
 
 prepare(){
-    export HOME=$(pwd)
     loadStates()
     exposeOutput()
 
@@ -85,6 +84,7 @@ update(){
 }
 
 loadStates(){
+    export HOME=$(pwd)
     aws s3 cp s3://$S3_BUCKET_TF_STATE/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate $TERRAFORM_FOLDER/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate
     aws s3 cp s3://$S3_BUCKET_TF_STATE/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup $TERRAFORM_FOLDER/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup
 }
