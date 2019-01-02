@@ -40,16 +40,9 @@ check(){
 }
 
 prepare(){
-    cd $TERRAFORM_FOLDER
-    aws s3 cp s3://$S3_BUCKET_TF_STATE/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate
-    aws s3 cp s3://$S3_BUCKET_TF_STATE/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup
-
-    terraform init -input=false
-    if [ -z ${TF_OUTPUT_MODULE+x} ]; then
-        export $(tf-output outputs -p '')
-    else
-        export $(tf-output outputs -p '' -m "${TF_OUTPUT_MODULE}")
-    fi
+    export HOME=$(pwd)
+    loadStates()
+    exposeOutput()
 
     export ASG_NAME="${autoscaling_g_name%\"}"
     ASG_NAME="${ASG_NAME#\"}"
@@ -67,7 +60,19 @@ prepare(){
     export OLD_INSTANCES=`aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names $ASG_NAME | jq -r '.AutoScalingGroups[].Instances[].InstanceId'`
 }
 
+exposeOutput(){
+    cd $TERRAFORM_FOLDER
+    terraform init -input=false
+    if [ -z ${TF_OUTPUT_MODULE+x} ]; then
+        export $(tf-output outputs -p '')
+    else
+        export $(tf-output outputs -p '' -m "${TF_OUTPUT_MODULE}")
+    fi
+    cd $HOME
+}
+
 update(){
+    cd $TERRAFORM_FOLDER
     export TF_VAR_desired_capacity=4
     export TF_VAR_min_size=4
     terraform plan -out=tfplan -input=false
@@ -76,11 +81,17 @@ update(){
     export TF_VAR_min_size=2
     terraform plan -out=tfplan -input=false
     terraform apply -input=false tfplan
+    cd $HOME
+}
+
+loadStates(){
+    aws s3 cp s3://$S3_BUCKET_TF_STATE/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate $TERRAFORM_FOLDER/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate
+    aws s3 cp s3://$S3_BUCKET_TF_STATE/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup $TERRAFORM_FOLDER/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup
 }
 
 saveState(){
-    aws s3 cp terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate s3://$S3_BUCKET_TF_STATE/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate
-    aws s3 cp terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup s3://$S3_BUCKET_TF_STATE/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup
+    aws s3 cp $TERRAFORM_FOLDER/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate s3://$S3_BUCKET_TF_STATE/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate
+    aws s3 cp $TERRAFORM_FOLDER/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup s3://$S3_BUCKET_TF_STATE/terraform.tfstate.d/$TF_WORKSPACE/terraform.tfstate.backup
 }
 
 help(){
