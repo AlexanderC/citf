@@ -40,8 +40,8 @@ check(){
 }
 
 prepare(){
-    loadStates()
-    exposeOutput()
+    loadStates
+    exposeOutput
 
     export ASG_NAME="${autoscaling_g_name%\"}"
     ASG_NAME="${ASG_NAME#\"}"
