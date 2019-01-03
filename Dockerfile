@@ -1,7 +1,7 @@
 FROM tico/docker
 MAINTAINER Dabija Afanasie <faneldabija2008@gmail.com>
 
-ENV TERRAFORM_VERSION 0.11.10
+ENV TERRAFORM_VERSION 0.11.11
 
 ADD "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip" /tmp/terraform.zip
 
