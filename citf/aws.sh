@@ -37,7 +37,11 @@ updateAmi(){
 
 cleanUp(){
     aws ec2 terminate-instances --instance-ids $OLD_INSTANCES
-    aws ec2 deregister-image --image-id $LAST_AMI_ID
+    if [ ! -z "$LAST_AMI_ID" ]
+    then
+      aws ec2 deregister-image --image-id $LAST_AMI_ID
+    fi
+
 }
 
 help(){
