@@ -1,5 +1,5 @@
 FROM tico/docker
-MAINTAINER Dabija Afanasie <faneldabija2008@gmail.com>
+LABEL maintainer="Alex Cucer <alexander.cucer@titanium-soft.com>"
 
 ENV TERRAFORM_VERSION 0.11.13
 
