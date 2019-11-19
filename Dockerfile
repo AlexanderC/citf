@@ -8,9 +8,6 @@ ADD "https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${T
 RUN apk --no-cache add nodejs nodejs-npm && \
     unzip /tmp/terraform.zip -d /tmp && mv /tmp/terraform /usr/local/bin/terraform
 
-RUN rm -rf /usr/local/bin/npm
-RUN rm -rf /usr/local/bin/npm-install
-
 RUN mkdir -p /opt/citf
 
 COPY citf/* /opt/citf/
