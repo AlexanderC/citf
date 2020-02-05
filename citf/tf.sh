@@ -72,12 +72,12 @@ exposeOutput(){
 
 update(){
     cd $TERRAFORM_FOLDER
-    export TF_VAR_desired_capacity=4
-    export TF_VAR_min_size=4
+    [ -z ${INCREASED_CAPACITY+x} ] && export TF_VAR_desired_capacity=4 || export TF_VAR_desired_capacity=$INCREASED_CAPACITY
+    [ -z ${INCREASED_CAPACITY+x} ] && export TF_VAR_min_size=4 || export TF_VAR_min_size=$INCREASED_CAPACITY
     terraform plan -out=tfplan -input=false
     terraform apply -input=false tfplan
-    export TF_VAR_desired_capacity=2
-    export TF_VAR_min_size=2
+    [ -z ${NORMAL_CAPACITY+x} ] && export TF_VAR_desired_capacity=2 || export TF_VAR_desired_capacity=$NORMAL_CAPACITY
+    [ -z ${NORMAL_CAPACITY+x} ] && export TF_VAR_min_size=2 || export TF_VAR_min_size=$NORMAL_CAPACITY
     terraform plan -out=tfplan -input=false
     terraform apply -input=false tfplan
     cd $HOME
